@@ -1,57 +1,49 @@
 import cv2
 import numpy as np
 
-cap = cv2.VideoCapture('ruta_del_video.mp4')
+# Ruta del video
+video_path = 'IMG_0264.mp4'
 
-canny_threshold1 = 50
-canny_threshold2 = 150
-hough_rho = 1
-hough_theta = np.pi/180
-hough_threshold = 15
-hough_min_line_length = 40
-hough_max_line_gap = 20
+# Carga del video
+cap = cv2.VideoCapture(video_path)
 
-def detect_lines(frame):
-  # Aplicamos la detección de bordes de Canny
-  edges = cv2.Canny(frame, canny_threshold1, canny_threshold2)
+while cap.isOpened():
+    ret, frame = cap.read()
 
-  # Aplicamos la transformada de Hough para detectar las líneas
-  lines = cv2.HoughLinesP(edges, hough_rho, hough_theta, hough_threshold,
-                          minLineLength=hough_min_line_length,
-                          maxLineGap=hough_max_line_gap)
+    if not ret:
+        break
 
-  # Dibujamos las líneas detectadas en el marco original
-  line_image = np.zeros_like(frame)
-  if lines is not None:
-    for line in lines:
-      x1, y1, x2, y2 = line[0]
-      cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 5)
+    # Convierte el frame a escala de grises
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-  # Combinamos las líneas dibujadas con el marco original
-  combined_image = cv2.addWeighted(frame, 0.8, line_image, 1, 0)
+    # Aplica el filtro Gaussiano para suavizar la imagen
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
-  return combined_image
+    # Detecta los bordes utilizando el operador de Canny
+    edges = cv2.Canny(blurred, 50, 150)
 
+    # Define los parámetros de la transformada de Hough
+    rho = 1  # Resolución de la distancia en píxeles
+    theta = np.pi / 180  # Resolución del ángulo en radianes
+    threshold_hough = 100  # Umbral mínimo de votos
+    min_line_length = 100  # Longitud mínima de línea aceptada
+    max_line_gap = 10  # Máxima brecha entre segmentos para conectarlos
 
+    # Aplica la transformada de Hough para detectar líneas
+    lines = cv2.HoughLinesP(edges, rho, theta, threshold_hough, np.array([]), min_line_length, max_line_gap)
 
-while True:
-  # Lee un cuadro del video
-  ret, frame = cap.read()
+    # Dibuja las líneas detectadas en el frame
+    if lines is not None:
+        for line in lines:
+            x1, y1, x2, y2 = line[0]
+            cv2.line(frame, (x1, y1), (x2, y2), (0, 0, 255), 3)
 
-  # Salir del bucle si no hay más cuadros para leer
-  if not ret:
-    break
+    # Muestra el resultado
+    imS = cv2.resize(frame, (1080, 720))   
+    cv2.imshow('Resultado', frame)
 
-  # Aplica la detección de líneas al cuadro actual
-  line_image = detect_lines(frame)
-
-  # Muestra el resultado en una ventana
-  cv2.imshow('Líneas de calle detectadas', line_image)
-
-  # Espera una tecla para salir del bucle
-  if cv2.waitKey(1) & 0xFF == ord('q'):
-    break
-
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 cap.release()
 cv2.destroyAllWindows()
