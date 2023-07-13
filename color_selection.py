@@ -4,7 +4,7 @@ import numpy as np
 
 # Read in the image
 #image = mpimg.imread('Img_test\im1.jpg')
-image = mpimg.imread('Img_test\im2.jpg')
+image = mpimg.imread('Img_test\im3.jpg')
 
 # Grab the x and y size and make a copy of the image
 ysize = image.shape[0]

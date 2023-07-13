@@ -3,20 +3,20 @@ import matplotlib.image as mpimg
 import numpy as np
 import cv2
 
-image = mpimg.imread('Img_test\im1.jpg')
+image = mpimg.imread('Img_test\im2.jpg')
 gray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 
 # Define a kernel size and apply Gaussian smoothing
 # Kernel para imagen propia (im1)
-# kernel_size = 1
+kernel_size = 1
 
 #Kernel para imagen dataset (im2)
-kernel_size = 3
+#kernel_size = 3
 blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size),0)
 
 # Define our parameters for Canny and apply
 # Parametros Canny para imagen propia (im1)
-low_threshold = 180
+low_threshold = 110
 high_threshold = 240
 # Parametros Canny para imagen dataset (im2)
 # low_threshold = 180
@@ -28,17 +28,19 @@ mask = np.zeros_like(edges)
 ignore_mask_color = 255   
 
 # Poligono para imagen propia (im2)
-# imshape = image.shape
-# vertices = np.array([[(0,imshape[0]),(410, 290), (830, 290), (imshape[1],imshape[0])]], dtype=np.int32)
-# cv2.fillPoly(mask, vertices, ignore_mask_color)
-# masked_edges = cv2.bitwise_and(edges, mask)
+imshape = image.shape
+vertices = np.array([[(0,imshape[0]-140),(470, 290), (720, 290), (imshape[1],imshape[0]-140)]], dtype=np.int32)
+cv2.fillPoly(mask, vertices, ignore_mask_color)
+masked_edges = cv2.bitwise_and(edges, mask)
 
 
 #Poligono para imagen dataset (im1)
-imshape = image.shape
-vertices = np.array([[(0,imshape[0]),(540, 390), (650, 390), (imshape[1],imshape[0])]], dtype=np.int32)
-cv2.fillPoly(mask, vertices, ignore_mask_color)
-masked_edges = cv2.bitwise_and(edges, mask)
+# imshape = image.shape
+# vertices = np.array([[(0,imshape[0]-120),(540, 390), (650, 390), (imshape[1],imshape[0]-120)]], dtype=np.int32)
+# print(imshape[0])
+# print(imshape[1])
+# cv2.fillPoly(mask, vertices, ignore_mask_color)
+# masked_edges = cv2.bitwise_and(edges, mask)
 
 
 # Define the Hough transform parameters
@@ -66,9 +68,12 @@ color_edges = np.dstack((edges, edges, edges))
 # Draw the lines on the edge image
 lines_edges = cv2.addWeighted(color_edges, 0.8, line_image, 1, 0)
 lines_edges = cv2.polylines(lines_edges,vertices, True, (0,0,255), 10)
+
+plt.subplot(2,1,1)
 plt.imshow(image)
 plt.title("Input Image")
-plt.show()
+plt.subplot(2,1,2)
 plt.imshow(lines_edges)
 plt.title("Colored Lane line [In RED] and Region of Interest [In Blue]")
 plt.show()
+

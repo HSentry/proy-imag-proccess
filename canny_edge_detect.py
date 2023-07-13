@@ -7,7 +7,7 @@ import cv2
 # Read in the image and convert to grayscale
 # Note: in the previous example we were reading a .jpg 
 # Here we read a .png and convert to 0,255 bytescale
-image = mpimg.imread('Img_test\im2.jpg')
+image = mpimg.imread('Img_test\im3.jpg')
 gray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 
 # Define a kernel size for Gaussian smoothing / blurring
