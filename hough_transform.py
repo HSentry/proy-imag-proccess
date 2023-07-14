@@ -6,7 +6,7 @@ import cv2
 image = mpimg.imread('Img_test\im2.jpg')
 gray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 
-# Define a kernel size and apply Gaussian smoothing
+# Define kernel 
 # Kernel para imagen propia (im1)
 kernel_size = 1
 
@@ -14,7 +14,7 @@ kernel_size = 1
 #kernel_size = 3
 blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size),0)
 
-# Define our parameters for Canny and apply
+
 # Parametros Canny para imagen propia (im1)
 low_threshold = 110
 high_threshold = 240
@@ -23,7 +23,7 @@ high_threshold = 240
 #high_threshold = 240
 edges = cv2.Canny(blur_gray, low_threshold, high_threshold)
 
-# Next we'll create a masked edges image using cv2.fillPoly()
+
 mask = np.zeros_like(edges)   
 ignore_mask_color = 255   
 
