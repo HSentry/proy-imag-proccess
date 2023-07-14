@@ -7,19 +7,26 @@ import cv2
 # Read in the image and convert to grayscale
 # Note: in the previous example we were reading a .jpg 
 # Here we read a .png and convert to 0,255 bytescale
-image = mpimg.imread('Img_test\im3.jpg')
+image = mpimg.imread('Img_test\im2.jpg')
 gray = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
 
 # Define a kernel size for Gaussian smoothing / blurring
-kernel_size = 1 # Must be an odd number (3, 5, 7...)
+kernel_size = 3 
+kernel_size = 1 
 blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size),0)
 
 # Define our parameters for Canny and run it
-low_threshold = 180
+# low_threshold = 180
+# high_threshold = 240
+low_threshold = 110
 high_threshold = 240
 edges = cv2.Canny(blur_gray, low_threshold, high_threshold)
 
-# Display the image
+
+plt.subplot(2,1,1)
+plt.imshow(image)
+plt.title("Imagen")
+plt.subplot(2,1,2)
 plt.imshow(edges, cmap='Greys_r')
-plt.title("Canny Edge Detection Image")
+plt.title("Canny Edge")
 plt.show()

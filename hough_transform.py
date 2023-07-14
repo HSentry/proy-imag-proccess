@@ -19,8 +19,8 @@ blur_gray = cv2.GaussianBlur(gray,(kernel_size, kernel_size),0)
 low_threshold = 110
 high_threshold = 240
 # Parametros Canny para imagen dataset (im2)
-# low_threshold = 180
-# high_threshold = 240
+#low_threshold = 180
+#high_threshold = 240
 edges = cv2.Canny(blur_gray, low_threshold, high_threshold)
 
 # Next we'll create a masked edges image using cv2.fillPoly()
@@ -36,9 +36,7 @@ masked_edges = cv2.bitwise_and(edges, mask)
 
 #Poligono para imagen dataset (im1)
 # imshape = image.shape
-# vertices = np.array([[(0,imshape[0]-120),(540, 390), (650, 390), (imshape[1],imshape[0]-120)]], dtype=np.int32)
-# print(imshape[0])
-# print(imshape[1])
+# vertices = np.array([[(170,imshape[0]-120),(500, 420), (700, 420), (imshape[1]-170,imshape[0]-120)]], dtype=np.int32)
 # cv2.fillPoly(mask, vertices, ignore_mask_color)
 # masked_edges = cv2.bitwise_and(edges, mask)
 
@@ -71,9 +69,9 @@ lines_edges = cv2.polylines(lines_edges,vertices, True, (0,0,255), 10)
 
 plt.subplot(2,1,1)
 plt.imshow(image)
-plt.title("Input Image")
+plt.title("Imagen")
 plt.subplot(2,1,2)
 plt.imshow(lines_edges)
-plt.title("Colored Lane line [In RED] and Region of Interest [In Blue]")
+plt.title("Linea coloreada [Rojo] - Región de interés [Azul]")
 plt.show()
 
